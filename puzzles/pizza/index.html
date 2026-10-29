@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraction pizza — Knowledge Cards</title>
+<meta name="description" content="Serve exactly the right part of the pizza. A tiny puzzle about fractions.">
+<link rel="icon" href="../../img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="pizza.css">
+</head>
+<body>
+<div class="wrap" style="gap:28px">
+
+<header class="site-header">
+  <a href="../../" class="back">
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3L5 9l6 6" fill="none" stroke="#1B2240" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All puzzles
+  </a>
+  <nav class="levels" aria-label="Levels">
+    <span class="levels-label">Level</span>
+    <div id="levels" class="levels-list"></div>
+  </nav>
+  <nav class="site-nav" aria-label="Language"><a href="pl.html" lang="pl" hreflang="pl">PL</a></nav>
+</header>
+
+<div class="layout">
+  <main class="game">
+    <div class="intro">
+      <h1>Fraction pizza</h1>
+      <p>Tap slices to put them on the plate, then press <strong>Serve</strong>. Only serve when you're sure!</p>
+    </div>
+
+    <section class="goal">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="12" fill="#FF8A5B" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="5" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/></svg>
+      <span>Goal: serve exactly <strong class="goal-num" id="goal-num">1/2</strong> of the pizza</span>
+    </section>
+
+    <section class="panel board" aria-label="Pizza">
+      <div class="cuts" id="cuts" role="group" hidden></div>
+      <svg class="pizza" viewBox="-115 -115 230 230"><g id="pizza"></g></svg>
+      <div class="serve-row">
+        <span class="plate" id="plate"></span>
+        <button class="btn primary" id="serve">Serve</button>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel win" id="win" aria-live="polite" hidden>
+      <div class="win-text">
+        <div class="stars" id="stars" role="img"></div>
+        <span class="win-title">Yum! <span id="eq-text"></span></span>
+        <span class="win-note" id="win-note"></span>
+      </div>
+      <button class="btn primary" id="next">Next level</button>
+    </section>
+
+    <div class="controls">
+      <span class="moves">Mistakes: <strong id="mistakes">0</strong></span>
+      <button class="btn" id="reset">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 9a5.5 5.5 0 1 0 1.8-4.1M3.5 2.5v3h3" fill="none" stroke="#1B2240" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start over
+      </button>
+    </div>
+  </main>
+
+  <aside class="panel rule" aria-labelledby="rule-title">
+    <h2 id="rule-title">Reading a fraction</h2>
+    <p><strong>Bottom number</strong>: how many equal parts. <strong>Top number</strong>: how many parts you take.</p>
+    <div class="why">
+      <strong>Same amount, different slices</strong>
+      <span>1/2 of a pizza cut in 8 is 4 slices — 4/8. Smaller slices, so you need more of them. That's why 4/8 = 1/2.</span>
+    </div>
+  </aside>
+</div>
+
+</div>
+<script src="pizza.js"></script>
+</body>
+</html>

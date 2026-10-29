@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Cards — little puzzles, big “aha!”</title>
+<meta name="description" content="Tiny puzzle games that teach one school idea at a time, for curious minds aged 8–15.">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-header">
+  <a href="./" class="logo">
+    <img src="img/logo.svg" width="44" height="44" alt="">
+    Knowledge Cards
+  </a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="#how">How it works</a>
+  </nav>
+</header>
+
+<main class="stack">
+  <section class="hero">
+    <div class="hero-text">
+      <span class="pill">For curious minds aged 8–15</span>
+      <h1>Little puzzles.<br>Big “aha!”</h1>
+      <p>Pick a card, poke at it, figure out the trick. Each one is a tiny game that teaches one idea from school — no textbook required.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg width="340" height="220" viewBox="0 0 340 220"><rect x="30" y="40" width="130" height="160" rx="18" fill="#DCE6FF" stroke="#1B2240" stroke-width="3" transform="rotate(-8 95 120)"/><rect x="180" y="40" width="130" height="160" rx="18" fill="#D9F2EC" stroke="#1B2240" stroke-width="3" transform="rotate(7 245 120)"/><rect x="105" y="20" width="130" height="170" rx="18" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><text x="170" y="100" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="34" fill="#1B2240">5 − 2</text><text x="170" y="140" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="34" fill="#E8590C">= 3</text><circle cx="290" cy="30" r="14" fill="#FFD25E" stroke="#1B2240" stroke-width="3"/><path d="M40 205l10-14 10 14z" fill="#FF8A5B" stroke="#1B2240" stroke-width="3" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <section class="puzzles" aria-labelledby="pick">
+    <div class="section-head">
+      <h2 id="pick">Pick a puzzle</h2>
+      <div class="filters" role="group" aria-label="Filter by subject">
+        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="math" aria-pressed="false">Math</button>
+        <button class="chip" data-filter="logic" aria-pressed="false">Logic</button>
+      </div>
+    </div>
+
+    <ul class="card-grid">
+
+      <li data-subject="math">
+        <a href="puzzles/balance/" class="card">
+          <div class="card-art" style="background:#DCE6FF">
+            <span class="badge">New</span>
+            <svg width="170" height="100" viewBox="0 0 170 100" aria-hidden="true"><path d="M85 30v58M60 90h50" stroke="#1B2240" stroke-width="4" stroke-linecap="round"/><path d="M20 30h130" stroke="#1B2240" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="30" r="6" fill="#1B2240"/><rect x="8" y="38" width="46" height="34" rx="10" fill="#FFFFFF" stroke="#2F5BEA" stroke-width="3"/><text x="31" y="62" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="20" fill="#1D3FB8">+3</text><rect x="116" y="38" width="46" height="34" rx="10" fill="#FFFFFF" stroke="#E8590C" stroke-width="3"/><text x="139" y="62" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="20" fill="#A33A00">−3</text></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#1D3FB8">Math · Equations</span>
+            <h3>Balance it!</h3>
+            <p>Hop numbers across the = sign and watch them flip. Can you leave one side with nothing?</p>
+            <div class="card-foot">
+              <span class="card-meta">Ages 9–13 · Easy <span class="stars-earned" data-progress="balance"></span></span>
+              <span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span>
+            </div>
+          </div>
+        </a>
+      </li>
+
+      <li data-subject="math">
+        <div class="card soon" aria-disabled="true">
+          <div class="card-art" style="background:#FFE3D3">
+            <span class="badge grey">Coming soon</span>
+            <svg width="110" height="110" viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="44" fill="#FFF6E6" stroke="#1B2240" stroke-width="4"/><path d="M55 55V11A44 44 0 0 1 99 55z" fill="#FF8A5B" stroke="#1B2240" stroke-width="3" stroke-linejoin="round"/><path d="M55 55h44A44 44 0 0 1 86 86z" fill="#FF8A5B" stroke="#1B2240" stroke-width="3" stroke-linejoin="round"/><path d="M55 11v88M11 55h88M24 24l62 62M86 24L24 86" stroke="#1B2240" stroke-width="2.5"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#A33A00">Math · Fractions</span>
+            <h3>Fraction pizza</h3>
+            <p>Slice it up so every friend gets a fair share. Is 2/4 really the same as 1/2?</p>
+            <div class="card-foot"><span class="card-meta">Ages 8–11 · Easy</span><span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span></div>
+          </div>
+        </div>
+      </li>
+
+      <li data-subject="logic">
+        <div class="card soon" aria-disabled="true">
+          <div class="card-art" style="background:#D9F2EC">
+            <span class="badge grey">Coming soon</span>
+            <svg width="160" height="100" viewBox="0 0 160 100" aria-hidden="true"><path d="M30 25h100M30 25v55M130 25l-50 55" stroke="#1B2240" stroke-width="4"/><circle cx="30" cy="25" r="16" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="130" cy="25" r="16" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="30" cy="80" r="16" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="80" cy="80" r="16" fill="#0E8F86" stroke="#1B2240" stroke-width="3"/><text x="30" y="31" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="17" fill="#1B2240">2</text><text x="130" y="31" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="17" fill="#1B2240">3</text><text x="30" y="86" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="17" fill="#1B2240">1</text><text x="80" y="86" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="17" fill="#FFFFFF">?</text></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#0A6B64">Logic</span>
+            <h3>Island bridges</h3>
+            <p>Each island needs exactly its number of bridges. No crossing allowed — plan ahead!</p>
+            <div class="card-foot"><span class="card-meta">Ages 10–15 · Medium</span><span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span></div>
+          </div>
+        </div>
+      </li>
+
+      <li data-subject="logic">
+        <div class="card soon" aria-disabled="true">
+          <div class="card-art" style="background:#F1E4FF">
+            <span class="badge grey">Coming soon</span>
+            <svg width="180" height="60" viewBox="0 0 180 60" aria-hidden="true"><circle cx="20" cy="30" r="15" fill="#7A4CD9" stroke="#1B2240" stroke-width="3"/><rect x="48" y="15" width="30" height="30" rx="5" fill="#FFD25E" stroke="#1B2240" stroke-width="3"/><circle cx="106" cy="30" r="15" fill="#7A4CD9" stroke="#1B2240" stroke-width="3"/><rect x="134" y="15" width="34" height="30" rx="8" fill="#FFFFFF" stroke="#1B2240" stroke-width="3" stroke-dasharray="5 4"/><text x="151" y="38" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="20" fill="#1B2240">?</text></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#5B2FB5">Logic · Patterns</span>
+            <h3>What comes next?</h3>
+            <p>Shapes, colours and numbers hide a rule. Crack it and fill the empty spot.</p>
+            <div class="card-foot"><span class="card-meta">Ages 8–12 · Easy</span><span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span></div>
+          </div>
+        </div>
+      </li>
+
+      <li data-subject="logic">
+        <div class="card soon" aria-disabled="true">
+          <div class="card-art" style="background:#FFF1C7">
+            <span class="badge grey">Coming soon</span>
+            <svg width="120" height="110" viewBox="0 0 120 110" aria-hidden="true"><path d="M38 48V34a22 22 0 0 1 44 0v14" fill="none" stroke="#1B2240" stroke-width="5"/><rect x="20" y="48" width="80" height="54" rx="12" fill="#FFD25E" stroke="#1B2240" stroke-width="3"/><rect x="30" y="62" width="18" height="26" rx="4" fill="#FFFFFF" stroke="#1B2240" stroke-width="2.5"/><rect x="51" y="62" width="18" height="26" rx="4" fill="#FFFFFF" stroke="#1B2240" stroke-width="2.5"/><rect x="72" y="62" width="18" height="26" rx="4" fill="#FFFFFF" stroke="#1B2240" stroke-width="2.5"/><text x="39" y="81" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#1B2240">4</text><text x="60" y="81" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#1B2240">?</text><text x="81" y="81" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#1B2240">7</text></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#7A5600">Logic · Deduction</span>
+            <h3>Code breaker</h3>
+            <p>Guess the 3-digit code. Every clue tells you something — use them all.</p>
+            <div class="card-foot"><span class="card-meta">Ages 10–15 · Hard</span><span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span></div>
+          </div>
+        </div>
+      </li>
+
+      <li data-subject="math">
+        <div class="card soon" aria-disabled="true">
+          <div class="card-art" style="background:#E3F0FF">
+            <span class="badge grey">Coming soon</span>
+            <svg width="160" height="100" viewBox="0 0 160 100" aria-hidden="true"><path d="M20 80c30-5 40-60 70-60s30 40 50 40" fill="none" stroke="#1B2240" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9"/><circle cx="20" cy="80" r="12" fill="#2F5BEA" stroke="#1B2240" stroke-width="3"/><path d="M134 50l12 10-12 10z" fill="#E8590C" stroke="#1B2240" stroke-width="3" stroke-linejoin="round"/><text x="90" y="16" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="18" fill="#1B2240">×7</text></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-topic" style="color:#1D3FB8">Math · Times tables</span>
+            <h3>Number jumper</h3>
+            <p>Jump only on multiples of 7 to reach the flag. One wrong hop and you splash!</p>
+            <div class="card-foot"><span class="card-meta">Ages 8–11 · Medium</span><span class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l9 6-9 6z" fill="#FFFFFF"/></svg></span></div>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section id="how" class="panel" style="padding:24px;display:flex;flex-direction:column;gap:10px">
+    <h2 style="font-size:28px">How it works</h2>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:var(--ink-soft);max-width:720px">Every card is one small game about one idea. There are no timers and no lives — just try things, see what happens, and work out the rule. Your stars are saved on this device.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Knowledge Cards — learn by poking at things.</span>
+</footer>
+
+</div>
+<script src="js/hub.js"></script>
+</body>
+</html>

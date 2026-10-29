@@ -1,0 +1,169 @@
+/* Knowledge Cards — shared styles */
+:root {
+  --ink: #1B2240;
+  --ink-soft: #3A4265;
+  --paper: #F3F6FB;
+  --grid: #E2E8F3;
+  --line: #B8C2D9;
+  --white: #FFFFFF;
+  --blue: #2F5BEA;
+  --blue-text: #1D3FB8;
+  --blue-tint: #E6EDFF;
+  --orange: #E8590C;
+  --orange-text: #A33A00;
+  --orange-tint: #FFE9DC;
+  --teal: #0E8F86;
+  --teal-text: #0A6B64;
+  --teal-tint: #D9F2EC;
+  --yellow: #FFD25E;
+  --display: 'Baloo 2', system-ui, sans-serif;
+  --body: 'Nunito', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--body);
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+a { color: var(--ink); }
+a:hover { color: var(--blue); }
+button { font-family: inherit; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.stack { display: flex; flex-direction: column; gap: 40px; }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 800; margin: 0; }
+
+/* ---------- Header ---------- */
+.site-header {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 16px;
+}
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--ink);
+  font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1;
+}
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+.site-nav a { padding: 10px 16px; font-weight: 700; text-decoration: none; border-radius: 999px; }
+
+/* ---------- Hero ---------- */
+.hero { display: flex; flex-wrap: wrap; align-items: center; gap: 32px; justify-content: space-between; }
+.hero-text { flex: 1 1 420px; display: flex; flex-direction: column; gap: 16px; }
+.hero-art { flex: 0 1 360px; display: flex; justify-content: center; }
+.hero-art svg { max-width: 100%; height: auto; }
+.hero h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.02; }
+.hero p { margin: 0; font-size: 19px; line-height: 1.5; max-width: 520px; color: var(--ink-soft); }
+.pill {
+  align-self: flex-start; background: #FFE3D3; color: #8A3300;
+  font-weight: 800; font-size: 14px; padding: 6px 12px;
+  border-radius: 999px; border: 2px solid var(--ink);
+}
+
+/* ---------- Filters ---------- */
+.section-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.section-head h2 { font-size: 32px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  min-height: 44px; padding: 0 18px;
+  font-weight: 800; font-size: 15px;
+  border-radius: 999px; border: 2px solid var(--ink);
+  background: var(--paper); color: var(--ink); cursor: pointer;
+}
+.chip:hover { background: var(--white); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+
+/* ---------- Cards ---------- */
+.puzzles { display: flex; flex-direction: column; gap: 20px; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+  list-style: none; margin: 0; padding: 0;
+}
+.card-grid > li { display: flex; }
+.card-grid > li[hidden] { display: none; }
+.card {
+  flex: 1;
+  display: flex; flex-direction: column;
+  text-decoration: none; color: var(--ink);
+  background: var(--white);
+  border: 3px solid var(--ink); border-radius: 22px;
+  box-shadow: 5px 5px 0 var(--ink);
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+a.card:hover { color: var(--ink); transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+.card.soon { opacity: .75; }
+.card-art {
+  position: relative; height: 150px;
+  border-bottom: 3px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.badge {
+  position: absolute; top: 12px; right: 12px;
+  background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px;
+  padding: 2px 10px; font-weight: 800; font-size: 13px;
+}
+.badge.grey { background: var(--white); }
+.card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.card-topic { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.card h3 { font-size: 26px; line-height: 1.1; }
+.card p { margin: 0; font-size: 16px; line-height: 1.45; color: var(--ink-soft); flex: 1; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.card-meta { font-weight: 700; font-size: 14px; color: var(--ink-soft); }
+.play {
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%; background: var(--ink);
+}
+.card.soon .play { background: var(--line); }
+.stars-earned { font-weight: 800; font-size: 14px; color: var(--teal-text); }
+
+.site-footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  padding-top: 24px; border-top: 2px dashed var(--line);
+  font-size: 15px; color: var(--ink-soft);
+}
+
+/* ---------- Puzzle page shared ---------- */
+.back {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 0 16px;
+  font-weight: 800; text-decoration: none;
+  background: var(--white); border: 2px solid var(--ink); border-radius: 999px;
+}
+.panel {
+  background: var(--white);
+  border: 3px solid var(--ink); border-radius: 22px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.btn {
+  min-height: 48px; padding: 0 20px;
+  border-radius: 999px; border: 2px solid var(--ink);
+  background: var(--white); color: var(--ink);
+  font-weight: 800; font-size: 16px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn.primary { background: var(--ink); color: var(--white); border-width: 3px; min-height: 52px; font-size: 18px; padding: 0 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

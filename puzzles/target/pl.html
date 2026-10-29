@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traf w cel! — Karty Wiedzy</title>
+<meta name="description" content="Przerzucaj właściwe liczby przez znak równości, żeby trafić w cel. Podchwytliwa łamigłówka o równaniach.">
+<link rel="icon" href="../../img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../balance/balance.css">
+</head>
+<body>
+<div class="wrap" style="gap:28px">
+
+<header class="site-header">
+  <a href="../../pl/" class="back">
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3L5 9l6 6" fill="none" stroke="#1B2240" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Wszystkie łamigłówki
+  </a>
+  <nav class="levels" aria-label="Poziomy">
+    <span class="levels-label">Poziom</span>
+    <div id="levels" class="levels-list"></div>
+  </nav>
+  <nav class="site-nav" aria-label="Język"><a href="./" lang="en" hreflang="en">EN</a></nav>
+</header>
+
+<div class="layout">
+  <main class="game">
+    <div class="intro">
+      <h1>Traf w cel!</h1>
+      <p>Przerzucaj liczby przez znak <strong>=</strong>, aż obie strony trafią w cel. Wybieraj uważnie — ruchów jest mało!</p>
+    </div>
+
+    <section class="goal" aria-live="polite">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="12" fill="#FF8A5B" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="5" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/></svg>
+      <span>Cel: obie strony mają dać w sumie <strong class="goal-num" id="goal-num">0</strong></span>
+    </section>
+
+    <section class="panel board" aria-label="Równanie">
+      <div class="equation">
+        <div class="side">
+          <span class="side-label" id="left-label">Lewa strona</span>
+          <div class="zone" id="left" role="group" aria-labelledby="left-label"></div>
+          <span class="sum">w sumie <strong id="left-sum">0</strong></span>
+        </div>
+        <div class="equals" aria-hidden="true">=</div>
+        <div class="side">
+          <span class="side-label" id="right-label">Prawa strona</span>
+          <div class="zone" id="right" role="group" aria-labelledby="right-label"></div>
+          <span class="sum">w sumie <strong id="right-sum">0</strong></span>
+        </div>
+      </div>
+      <div class="scale-note">
+        <svg width="120" height="44" viewBox="0 0 120 44" role="img" aria-label="Waga, która zawsze jest w równowadze"><path d="M60 12v26M42 40h36" stroke="#1B2240" stroke-width="3.5" stroke-linecap="round"/><path d="M10 12h100" stroke="#1B2240" stroke-width="4.5" stroke-linecap="round"/><circle cx="60" cy="12" r="5" fill="#1B2240"/><path d="M4 18h20l-10 12z" fill="#DCE6FF" stroke="#1B2240" stroke-width="2.5" stroke-linejoin="round"/><path d="M96 18h20l-10 12z" fill="#FFE3D3" stroke="#1B2240" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span>Obie strony zawsze dają tę samą sumę — waga nigdy się nie przechyla.</span>
+      </div>
+    </section>
+
+    <section class="panel win" id="win" aria-live="polite" hidden>
+      <div class="win-text">
+        <div class="stars" id="stars" role="img"></div>
+        <span class="win-title">W dziesiątkę! <span id="eq-text"></span></span>
+        <span class="win-note" id="win-note"></span>
+      </div>
+      <button class="btn primary" id="next">Następny poziom</button>
+    </section>
+
+    <section class="panel win lost" id="lost" aria-live="polite" hidden>
+      <div class="win-text">
+        <span class="win-title">Koniec ruchów!</span>
+        <span class="win-note" id="lost-note"></span>
+      </div>
+      <button class="btn primary" id="retry">Spróbuj jeszcze raz</button>
+    </section>
+
+    <div class="controls">
+      <span class="moves">Ruchy: <strong id="moves">0</strong> z <span id="budget">0</span> <span class="muted">· najmniej możliwych: <span id="min-moves">0</span></span></span>
+      <button class="btn" id="reset">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3.5 9a5.5 5.5 0 1 0 1.8-4.1M3.5 2.5v3h3" fill="none" stroke="#1B2240" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Zacznij od nowa
+      </button>
+    </div>
+  </main>
+
+  <aside class="panel rule" aria-labelledby="rule-title">
+    <h2 id="rule-title">Sztuczka planowania</h2>
+    <p>Każdy rzut zmienia <strong>obie</strong> strony o tyle samo.</p>
+    <div class="rule-rows">
+      <div class="rule-row"><span class="mini pos">+5</span><span>przerzucone → obie strony <strong>mniejsze o 5</strong></span></div>
+      <div class="rule-row"><span class="mini neg">−3</span><span>przerzucone → obie strony <strong>większe o 3</strong></span></div>
+    </div>
+    <div class="why">
+      <strong>Jak planować</strong>
+      <span>Teraz obie strony to 8, a cel to 3? Musisz razem odjąć 5. Znajdź liczby, które dają w sumie 5 — z dowolnej strony.</span>
+    </div>
+  </aside>
+</div>
+
+</div>
+<script src="levels.js"></script>
+<script src="../balance/balance.js"></script>
+</body>
+</html>

@@ -58,3 +58,4 @@
 }
 .mini.pos { border-color: var(--blue); background: var(--blue-tint); color: var(--blue-text); }
 .mini.neg { border-color: var(--orange); background: var(--orange-tint); color: var(--orange-text); }
+.win.lost { background: var(--orange-tint); }

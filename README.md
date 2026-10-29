@@ -7,6 +7,7 @@ Little puzzles, big “aha!” — a page of cards for kids aged 8–15. Each ca
 | Puzzle | Idea | Status |
 | --- | --- | --- |
 | **Balance it!** | Moving a number across `=` flips its sign | Playable |
+| **Hit the target!** | Choosing which numbers to move (runs on the Balance it! engine, own `levels.js`) | Playable |
 | Fraction pizza | Equivalent fractions | Planned |
 | Island bridges | Logic / planning | Planned |
 | What comes next? | Patterns | Planned |

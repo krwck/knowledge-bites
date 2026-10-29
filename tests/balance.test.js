@@ -75,3 +75,37 @@ test('equation text', () => {
   t = B.move(t, t.left[0].id);
   assert.strictEqual(B.equationText(t), '0 = 4 + 3 − 7');
 });
+
+// ---- Hit the target! (same engine, its own levels) ----
+const tctx = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../puzzles/target/levels.js'), 'utf8'), tctx);
+const TARGET = JSON.parse(JSON.stringify(tctx.window.BALANCE_LEVELS));
+
+test('target levels: one best answer, both sides and a negative needed, limit = best + 2', () => {
+  TARGET.forEach((L, i) => {
+    const all = L.l.concat(L.r), nl = L.l.length;
+    const S = L.l.reduce((x, y) => x + y, 0);
+    assert.strictEqual(S, L.r.reduce((x, y) => x + y, 0), `level ${i + 1} balances`);
+    const min = B.minMoves(TARGET, i);
+    assert.strictEqual(L.b, min + 2, `level ${i + 1} budget`);
+    const best = [];
+    for (let m = 0; m < 1 << all.length; m++) {
+      const picked = all.map((v, k) => [v, k]).filter(([, k]) => m >> k & 1);
+      if (picked.length === min && picked.reduce((a, [v]) => a + v, 0) === S - L.t) best.push(picked);
+    }
+    assert.strictEqual(best.length, 1, `level ${i + 1} has a unique best answer`);
+    const ks = best[0].map(([, k]) => k);
+    assert.ok(ks.some(k => k < nl) && ks.some(k => k >= nl), `level ${i + 1} uses both sides`);
+    assert.ok(best[0].some(([v]) => v < 0), `level ${i + 1} needs a negative`);
+  });
+});
+
+test('running out of moves loses and freezes the board', () => {
+  const lv = [{ l: [4, 7, -7], r: [-2, 6], t: 5, b: 2 }];
+  let s = B.newLevel(lv, 0);
+  s = B.move(s, s.left[0].id); // throw +4: both sides 0
+  s = B.move(s, s.left[0].id); // throw +7: both sides −7
+  assert.ok(B.isLost(s));
+  assert.ok(!B.isWon(s));
+  assert.strictEqual(B.move(s, s.left[0].id), s);
+});

@@ -3,7 +3,6 @@
   'use strict';
 
   var MINUS = '−';
-  var STORAGE_KEY = 'kc:balance';
 
   // ---------- Pure logic (no DOM) ----------
 
@@ -18,11 +17,15 @@
     var n = 0;
     function mk(v) { n += 1; return { id: 't' + n, v: v }; }
     var L = levels[i];
-    return { level: i, target: L.t || 0, left: L.l.map(mk), right: L.r.map(mk), moves: 0, lastId: null };
+    return { level: i, target: L.t || 0, budget: L.b || Infinity,
+      left: L.l.map(mk), right: L.r.map(mk), moves: 0, lastId: null };
   }
 
   // Won when both sides add up to the target (they're always equal to each other).
   function isWon(s) { return sum(s.left) === s.target; }
+
+  // Lost when a level with a move limit (`b`) runs out of moves.
+  function isLost(s) { return !isWon(s) && s.moves >= s.budget; }
 
   // Every move lowers both sums by the moved tile's original value, so the fewest
   // moves = smallest set of tiles whose values add up to (start sum − target).
@@ -41,7 +44,7 @@
 
   // Move tile `id` to the other side; its sign flips. Returns a new state.
   function move(s, id) {
-    if (isWon(s)) return s;
+    if (isWon(s) || isLost(s)) return s;
     var fromLeft = s.left.some(function (t) { return t.id === id; });
     var src = fromLeft ? s.left : s.right;
     var dst = fromLeft ? s.right : s.left;
@@ -52,6 +55,7 @@
     return {
       level: s.level,
       target: s.target,
+      budget: s.budget,
       left: fromLeft ? nsrc : ndst,
       right: fromLeft ? ndst : nsrc,
       moves: s.moves + 1,
@@ -78,7 +82,7 @@
   }
 
   var Logic = {
-    sum: sum, signed: signed, plain: plain, newLevel: newLevel, isWon: isWon,
+    sum: sum, signed: signed, plain: plain, newLevel: newLevel, isWon: isWon, isLost: isLost,
     minMoves: minMoves, move: move, stars: stars, equationText: equationText
   };
 
@@ -101,7 +105,8 @@
       perfect: 'Fewest moves possible. Nice thinking!',
       tryFewer: function (m) { return 'Solved! Can you do it in ' + m + (m === 1 ? ' move?' : ' moves?'); },
       again: 'Play again from level 1',
-      next: 'Next level'
+      next: 'Next level',
+      lost: function (sum, t) { return 'Both sides add up to ' + sum + ', but the goal is ' + t + '. Think about which numbers to throw — and what they turn into!'; }
     },
     pl: {
       level: function (n) { return 'Poziom ' + n; },
@@ -114,12 +119,14 @@
       perfect: 'Najmniej możliwych ruchów. Świetne myślenie!',
       tryFewer: function (m) { return 'Udało się! A dasz radę w ' + m + (m === 1 ? ' ruchu?' : ' ruchach?'); },
       again: 'Zagraj od nowa od poziomu 1',
-      next: 'Następny poziom'
+      next: 'Następny poziom',
+      lost: function (sum, t) { return 'Obie strony mają w sumie ' + sum + ', a cel to ' + t + '. Pomyśl, które liczby przerzucić — i czym się staną!'; }
     }
   };
   var T = STRINGS[document.documentElement.lang] || STRINGS.en;
 
   var LEVELS = root.BALANCE_LEVELS;
+  var STORAGE_KEY = root.BALANCE_KEY || 'kc:balance'; // other cards reuse this engine with their own key
   LEVELS.forEach(function (L, i) {
     var a = L.l.reduce(function (x, y) { return x + y; }, 0);
     var b = L.r.reduce(function (x, y) { return x + y; }, 0);
@@ -133,7 +140,7 @@
     leftSum: $('left-sum'), rightSum: $('right-sum'),
     win: $('win'), stars: $('stars'), eq: $('eq-text'), note: $('win-note'),
     next: $('next'), reset: $('reset'), moves: $('moves'), min: $('min-moves'),
-    goal: $('goal-num')
+    goal: $('goal-num'), budget: $('budget'), lost: $('lost'), lostNote: $('lost-note'), retry: $('retry')
   };
 
   // Saved progress: { best: { "0": 3, "1": 2 }, levels: 5, current: 1 }
@@ -147,6 +154,7 @@
 
   var progress = load();
   progress.levels = LEVELS.length;
+  Object.keys(progress.best).forEach(function (k) { if (+k >= LEVELS.length) delete progress.best[k]; });
   var start = Math.min(progress.current || 0, LEVELS.length - 1);
   var state = newLevel(LEVELS, start);
 
@@ -167,7 +175,7 @@
     });
   }
 
-  function renderSide(zone, tiles, side, won) {
+  function renderSide(zone, tiles, side, done) {
     zone.textContent = '';
     if (tiles.length === 0) {
       var z = document.createElement('span');
@@ -183,10 +191,10 @@
       b.dataset.id = t.id;
       b.dataset.v = t.v;
       b.textContent = signed(t.v);
-      b.disabled = won;
+      b.disabled = done;
       b.setAttribute('aria-label',
         (pos ? T.plus : T.minus) + Math.abs(t.v) +
-        (won ? '' : T.moveTo(side === 'left' ? T.right : T.left)));
+        (done ? '' : T.moveTo(side === 'left' ? T.right : T.left)));
       if (t.id === state.lastId) {
         var tag = document.createElement('span');
         tag.className = 'flipped-tag';
@@ -217,16 +225,21 @@
   }
 
   function render() {
-    var won = isWon(state);
+    var won = isWon(state), lost = isLost(state);
     var min = minMoves(LEVELS, state.level);
     renderLevels();
-    renderSide(el.left, state.left, 'left', won);
-    renderSide(el.right, state.right, 'right', won);
+    renderSide(el.left, state.left, 'left', won || lost);
+    renderSide(el.right, state.right, 'right', won || lost);
     el.leftSum.textContent = plain(sum(state.left));
     el.rightSum.textContent = plain(sum(state.right));
     el.goal.textContent = plain(state.target);
     el.moves.textContent = String(state.moves);
     el.min.textContent = String(min);
+    if (el.budget) el.budget.textContent = String(state.budget);
+    if (el.lost) {
+      el.lost.hidden = !lost;
+      el.lostNote.textContent = T.lost(plain(sum(state.left)), plain(state.target));
+    }
 
     el.win.hidden = !won;
     if (won) {
@@ -293,10 +306,16 @@
     }
     render();
     el.win.hidden = true; // reveal after the landing
+    if (el.lost) el.lost.hidden = true;
     var moved = document.querySelector('.tile[data-id="' + id + '"]');
     flying = true;
     fly(from, oldV, moved, function () {
       flying = false;
+      if (isLost(state)) {
+        el.lost.hidden = false;
+        el.retry.focus();
+        return;
+      }
       if (!isWon(state)) {
         // Keep keyboard focus on the tile that just jumped.
         var t = document.querySelector('.tile[data-id="' + id + '"]');
@@ -321,6 +340,7 @@
     if (first) first.focus();
   });
   el.reset.addEventListener('click', function () { goTo(state.level); });
+  if (el.retry) el.retry.addEventListener('click', function () { goTo(state.level); });
 
   render();
 })(typeof window !== 'undefined' ? window : globalThis);

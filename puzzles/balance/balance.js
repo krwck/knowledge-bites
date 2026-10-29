@@ -18,14 +18,25 @@
     var n = 0;
     function mk(v) { n += 1; return { id: 't' + n, v: v }; }
     var L = levels[i];
-    return { level: i, left: L.l.map(mk), right: L.r.map(mk), moves: 0, lastId: null };
+    return { level: i, target: L.t || 0, left: L.l.map(mk), right: L.r.map(mk), moves: 0, lastId: null };
   }
 
-  function isWon(s) { return s.left.length === 0 || s.right.length === 0; }
+  // Won when both sides add up to the target (they're always equal to each other).
+  function isWon(s) { return sum(s.left) === s.target; }
 
-  // Fewest moves = move every tile from the smaller side.
+  // Every move lowers both sums by the moved tile's original value, so the fewest
+  // moves = smallest set of tiles whose values add up to (start sum − target).
+  // Infinity if impossible. ponytail: brute force 2^n, fine for <~16 tiles.
   function minMoves(levels, i) {
-    return Math.min(levels[i].l.length, levels[i].r.length);
+    var L = levels[i], all = L.l.concat(L.r);
+    var need = L.l.reduce(function (a, v) { return a + v; }, 0) - (L.t || 0);
+    var best = Infinity;
+    for (var mask = 0; mask < (1 << all.length); mask++) {
+      var total = 0, count = 0;
+      for (var b = 0; b < all.length; b++) if (mask & (1 << b)) { total += all[b]; count++; }
+      if (total === need && count < best) best = count;
+    }
+    return best;
   }
 
   // Move tile `id` to the other side; its sign flips. Returns a new state.
@@ -40,6 +51,7 @@
     var ndst = dst.concat([{ id: tile.id, v: -tile.v }]);
     return {
       level: s.level,
+      target: s.target,
       left: fromLeft ? nsrc : ndst,
       right: fromLeft ? ndst : nsrc,
       moves: s.moves + 1,
@@ -53,14 +65,16 @@
     return 1;
   }
 
-  // "5 − 2 − 3 = 0" (or "0 = …" when the left side is the empty one)
+  // "5 − 2 − 3 = 0" — an empty side reads as 0
   function equationText(s) {
-    var full = s.left.length ? s.left : s.right;
-    var expr = full.map(function (t, i) {
-      if (i === 0) return plain(t.v);
-      return (t.v < 0 ? ' ' + MINUS + ' ' : ' + ') + Math.abs(t.v);
-    }).join('');
-    return s.left.length ? expr + ' = 0' : '0 = ' + expr;
+    function expr(tiles) {
+      if (!tiles.length) return '0';
+      return tiles.map(function (t, i) {
+        if (i === 0) return plain(t.v);
+        return (t.v < 0 ? ' ' + MINUS + ' ' : ' + ') + Math.abs(t.v);
+      }).join('');
+    }
+    return expr(s.left) + ' = ' + expr(s.right);
   }
 
   var Logic = {
@@ -74,11 +88,43 @@
 
   // ---------- Browser UI ----------
 
+  // UI strings, picked by <html lang>. Add a language = add a key.
+  var STRINGS = {
+    en: {
+      level: function (n) { return 'Level ' + n; },
+      solved: function (n) { return ', solved with ' + n + ' of 3 stars'; },
+      plus: 'plus ', minus: 'minus ',
+      moveTo: function (side) { return '. Move to the ' + side + ' side'; },
+      left: 'left', right: 'right',
+      flipped: 'flipped!',
+      stars: function (n) { return n + ' of 3 stars'; },
+      perfect: 'Fewest moves possible. Nice thinking!',
+      tryFewer: function (m) { return 'Solved! Can you do it in ' + m + (m === 1 ? ' move?' : ' moves?'); },
+      again: 'Play again from level 1',
+      next: 'Next level'
+    },
+    pl: {
+      level: function (n) { return 'Poziom ' + n; },
+      solved: function (n) { return ', rozwiązany na ' + n + ' z 3 gwiazdek'; },
+      plus: 'plus ', minus: 'minus ',
+      moveTo: function (side) { return '. Przenieś na ' + side + ' stronę'; },
+      left: 'lewą', right: 'prawą',
+      flipped: 'zmiana!',
+      stars: function (n) { return n + ' z 3 gwiazdek'; },
+      perfect: 'Najmniej możliwych ruchów. Świetne myślenie!',
+      tryFewer: function (m) { return 'Udało się! A dasz radę w ' + m + (m === 1 ? ' ruchu?' : ' ruchach?'); },
+      again: 'Zagraj od nowa od poziomu 1',
+      next: 'Następny poziom'
+    }
+  };
+  var T = STRINGS[document.documentElement.lang] || STRINGS.en;
+
   var LEVELS = root.BALANCE_LEVELS;
   LEVELS.forEach(function (L, i) {
     var a = L.l.reduce(function (x, y) { return x + y; }, 0);
     var b = L.r.reduce(function (x, y) { return x + y; }, 0);
     if (a !== b) console.warn('Balance it! level ' + (i + 1) + ' does not balance: ' + a + ' vs ' + b);
+    if (a === (L.t || 0) || minMoves(LEVELS, i) === Infinity) console.warn('Balance it! level ' + (i + 1) + ' is already solved or impossible');
   });
 
   var $ = function (id) { return document.getElementById(id); };
@@ -86,7 +132,8 @@
     levels: $('levels'), left: $('left'), right: $('right'),
     leftSum: $('left-sum'), rightSum: $('right-sum'),
     win: $('win'), stars: $('stars'), eq: $('eq-text'), note: $('win-note'),
-    next: $('next'), reset: $('reset'), moves: $('moves'), min: $('min-moves')
+    next: $('next'), reset: $('reset'), moves: $('moves'), min: $('min-moves'),
+    goal: $('goal-num')
   };
 
   // Saved progress: { best: { "0": 3, "1": 2 }, levels: 5, current: 1 }
@@ -111,8 +158,8 @@
       var b = document.createElement('button');
       b.className = 'level-btn' + (progress.best[i] ? ' done' : '');
       b.textContent = String(i + 1);
-      var label = 'Level ' + (i + 1);
-      if (progress.best[i]) label += ', solved with ' + progress.best[i] + ' of 3 stars';
+      var label = T.level(i + 1);
+      if (progress.best[i]) label += T.solved(progress.best[i]);
       b.setAttribute('aria-label', label);
       if (i === state.level) b.setAttribute('aria-current', 'step');
       b.addEventListener('click', function () { goTo(i); });
@@ -134,16 +181,17 @@
       var pos = t.v > 0;
       b.className = 'tile ' + (pos ? 'pos' : 'neg') + (t.id === state.lastId ? ' pop' : '');
       b.dataset.id = t.id;
+      b.dataset.v = t.v;
       b.textContent = signed(t.v);
       b.disabled = won;
       b.setAttribute('aria-label',
-        (pos ? 'plus ' : 'minus ') + Math.abs(t.v) +
-        (won ? '' : '. Move to the ' + (side === 'left' ? 'right' : 'left') + ' side'));
+        (pos ? T.plus : T.minus) + Math.abs(t.v) +
+        (won ? '' : T.moveTo(side === 'left' ? T.right : T.left)));
       if (t.id === state.lastId) {
         var tag = document.createElement('span');
         tag.className = 'flipped-tag';
         tag.setAttribute('aria-hidden', 'true');
-        tag.textContent = 'flipped!';
+        tag.textContent = T.flipped;
         b.appendChild(tag);
       }
       b.addEventListener('click', function () { onMove(t.id); });
@@ -153,7 +201,7 @@
 
   function renderStars(n) {
     el.stars.textContent = '';
-    el.stars.setAttribute('aria-label', n + ' of 3 stars');
+    el.stars.setAttribute('aria-label', T.stars(n));
     for (var i = 0; i < 3; i++) {
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '34'); svg.setAttribute('height', '34');
@@ -176,6 +224,7 @@
     renderSide(el.right, state.right, 'right', won);
     el.leftSum.textContent = plain(sum(state.left));
     el.rightSum.textContent = plain(sum(state.right));
+    el.goal.textContent = plain(state.target);
     el.moves.textContent = String(state.moves);
     el.min.textContent = String(min);
 
@@ -185,27 +234,78 @@
       renderStars(n);
       el.eq.textContent = equationText(state);
       el.note.textContent = n === 3
-        ? 'Fewest moves possible. Nice thinking!'
-        : 'Solved! Can you do it in ' + min + (min === 1 ? ' move?' : ' moves?');
+        ? T.perfect
+        : T.tryFewer(min);
       var last = state.level === LEVELS.length - 1;
-      el.next.textContent = last ? 'Play again from level 1' : 'Next level';
+      el.next.textContent = last ? T.again : T.next;
     }
   }
 
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Throw a copy of the tile along a parabola over the = sign, spinning so the
+  // old sign turns into the new one mid-air. Calls done() when it lands.
+  function fly(from, oldV, target, done) {
+    if (reduceMotion || !target.animate) return done();
+    var to = target.getBoundingClientRect();
+    var flyer = document.createElement('div');
+    flyer.className = 'flyer';
+    flyer.style.width = to.width + 'px';
+    flyer.style.height = to.height + 'px';
+    [oldV, -oldV].forEach(function (v, i) {
+      var face = document.createElement('span');
+      face.className = 'tile ' + (v > 0 ? 'pos' : 'neg') + (i ? ' back' : '');
+      face.textContent = signed(v);
+      flyer.appendChild(face);
+    });
+    document.body.appendChild(flyer);
+    target.style.visibility = 'hidden';
+
+    // Free fall: x moves evenly, y follows a parabola peaking `h` px above the start/end.
+    var h = 140, frames = [], N = 24;
+    for (var k = 0; k <= N; k++) {
+      var p = k / N;
+      var x = from.left + (to.left - from.left) * p;
+      var y = from.top + (to.top - from.top) * p - 4 * h * p * (1 - p);
+      frames.push({ transform: 'translate(' + x + 'px,' + y + 'px) perspective(600px) rotateY(' + 180 * p + 'deg)' });
+    }
+    var anim = flyer.animate(frames, { duration: 850, easing: 'linear' });
+    anim.onfinish = anim.oncancel = function () {
+      flyer.remove();
+      target.style.visibility = '';
+      done();
+    };
+  }
+
+  var flying = false;
+
   function onMove(id) {
+    if (flying) return;
+    var src = document.querySelector('.tile[data-id="' + id + '"]');
+    var from = src.getBoundingClientRect();
+    var oldV = Number(src.dataset.v);
     state = move(state, id);
-    if (isWon(state)) {
+    var won = isWon(state);
+    if (won) {
       var n = stars(state.moves, minMoves(LEVELS, state.level));
       progress.best[state.level] = Math.max(progress.best[state.level] || 0, n);
       save(progress);
-      render();
-      el.next.focus();
-      return;
     }
     render();
-    // Keep keyboard focus on the tile that just jumped.
+    el.win.hidden = true; // reveal after the landing
     var moved = document.querySelector('.tile[data-id="' + id + '"]');
-    if (moved) moved.focus();
+    flying = true;
+    fly(from, oldV, moved, function () {
+      flying = false;
+      if (!isWon(state)) {
+        // Keep keyboard focus on the tile that just jumped.
+        var t = document.querySelector('.tile[data-id="' + id + '"]');
+        if (t) t.focus();
+        return;
+      }
+      el.win.hidden = false;
+      el.next.focus();
+    });
   }
 
   function goTo(i) {

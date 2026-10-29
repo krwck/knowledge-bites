@@ -24,14 +24,20 @@
     <span class="levels-label">Level</span>
     <div id="levels" class="levels-list"></div>
   </nav>
+  <nav class="site-nav" aria-label="Language"><a href="pl.html" lang="pl" hreflang="pl">PL</a></nav>
 </header>
 
 <div class="layout">
   <main class="game">
     <div class="intro">
       <h1>Balance it!</h1>
-      <p>Goal: make one side of the equation equal <strong>0</strong>. Tap a number to send it across the <strong>=</strong> sign.</p>
+      <p>Tap a number to send it across the <strong>=</strong> sign. Watch it flip!</p>
     </div>
+
+    <section class="goal" aria-live="polite">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="12" fill="#FF8A5B" stroke="#1B2240" stroke-width="3"/><circle cx="22" cy="22" r="5" fill="#FFFFFF" stroke="#1B2240" stroke-width="3"/></svg>
+      <span>Goal: make both sides add up to <strong class="goal-num" id="goal-num">0</strong></span>
+    </section>
 
     <section class="panel board" aria-label="Equation">
       <div class="equation">

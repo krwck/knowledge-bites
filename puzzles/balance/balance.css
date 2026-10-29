@@ -1,24 +1,4 @@
 /* Balance it! — puzzle-specific styles */
-.levels { display: flex; align-items: center; gap: 8px; }
-.levels-label { font-weight: 800; font-size: 15px; margin-right: 4px; }
-.levels-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.level-btn {
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid var(--ink); background: var(--white); color: var(--ink);
-  font-family: var(--display); font-weight: 800; font-size: 17px; cursor: pointer;
-}
-.level-btn.done { background: var(--teal); color: var(--white); }
-.level-btn[aria-current="step"] { background: var(--ink); color: var(--white); }
-
-.layout { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
-.game { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
-
-.intro { display: flex; flex-direction: column; gap: 6px; }
-.intro h1 { font-size: clamp(36px, 5vw, 52px); line-height: 1; }
-.intro p { margin: 0; font-size: 19px; line-height: 1.45; color: var(--ink-soft); }
-.intro strong { color: var(--ink); }
-
-.board { border-radius: 26px; box-shadow: 6px 6px 0 var(--ink); padding: 28px 24px; display: flex; flex-direction: column; gap: 24px; }
 .equation { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 16px; }
 .side { flex: 1 1 240px; display: flex; flex-direction: column; gap: 10px; }
 .side-label { font-weight: 800; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); text-align: center; }
@@ -53,6 +33,10 @@
 .tile.neg { background: var(--orange-tint); color: var(--orange-text); border-color: var(--orange); }
 .tile.pop { animation: pop .45s cubic-bezier(.3, 1.6, .5, 1); }
 @keyframes pop { from { transform: scale(.5) rotate(-25deg); } to { transform: scale(1) rotate(0); } }
+/* Flying copy of a tile while it arcs over the = sign */
+.flyer { position: fixed; left: 0; top: 0; z-index: 10; pointer-events: none; transform-style: preserve-3d; }
+.flyer .tile { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; backface-visibility: hidden; }
+.flyer .tile.back { transform: rotateY(180deg); }
 .flipped-tag {
   position: absolute; top: -14px; right: -10px;
   background: var(--yellow); color: var(--ink);
@@ -65,25 +49,6 @@
   padding-top: 8px; border-top: 2px dashed #DCE2EE;
   font-weight: 700; font-size: 16px; color: var(--ink-soft); text-align: center;
 }
-
-.win {
-  background: var(--teal-tint); padding: 20px 24px;
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
-}
-.win[hidden] { display: none; }
-.win-text { display: flex; flex-direction: column; gap: 6px; }
-.stars { display: flex; gap: 6px; }
-.win-title { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1.1; }
-.win-title span { color: var(--teal-text); }
-.win-note { font-size: 16px; color: var(--ink-soft); }
-
-.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-.moves { font-weight: 700; font-size: 17px; }
-.muted { color: var(--ink-soft); font-weight: 600; }
-
-.rule { flex: 1 1 260px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
-.rule h2 { font-size: 24px; }
-.rule p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
 .rule-rows { display: flex; flex-direction: column; gap: 10px; }
 .rule-row { display: flex; align-items: center; gap: 12px; }
 .mini {
@@ -93,9 +58,3 @@
 }
 .mini.pos { border-color: var(--blue); background: var(--blue-tint); color: var(--blue-text); }
 .mini.neg { border-color: var(--orange); background: var(--orange-tint); color: var(--orange-text); }
-.why {
-  background: #FFF1C7; border: 2px solid var(--ink); border-radius: 16px;
-  padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;
-  font-size: 15px; line-height: 1.5;
-}
-.why span { color: var(--ink-soft); }

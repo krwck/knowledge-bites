@@ -11,7 +11,11 @@ Little puzzles, big “aha!” — a page of cards for kids aged 8–15. Each ca
 | Island bridges | Logic / planning | Planned |
 | What comes next? | Patterns | Planned |
 | Code breaker | Deduction | Planned |
-| Number jumper | Times tables | Planned |
+| **Number jumper** | Times tables / multiples | Playable |
+
+## Polish version
+
+`pl/index.html` and each `puzzles/*/pl.html` are Polish copies of the English pages (EN/PL link in the header). They share CSS, JS and levels; each puzzle's JS picks its UI strings from `<html lang>`. When you change an English page, mirror the change in its Polish copy.
 
 ## Run it
 
@@ -50,10 +54,11 @@ tests/
 Append to `puzzles/balance/levels.js`:
 
 ```js
-{ l: [6, -1], r: [2, 3] }   // 6 − 1 = 2 + 3
+{ l: [6, -1], r: [2, 3] }        // 6 − 1 = 2 + 3, goal: both sides 0
+{ l: [6, -1], r: [2, 3], t: 1 }  // goal: both sides add up to 1
 ```
 
-Both sides must add up to the same number; `node --test` checks this.
+Both sides must add up to the same number, and the goal `t` (default 0) must be reachable but not already met; `node --test` checks this. The fewest-moves count (for stars) is worked out automatically.
 
 ## Adding a new puzzle
 

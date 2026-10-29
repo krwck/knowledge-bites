@@ -11,12 +11,27 @@ const ctx = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../puzzles/balance/levels.js'), 'utf8'), ctx);
 const LEVELS = JSON.parse(JSON.stringify(ctx.window.BALANCE_LEVELS)); // plain arrays from this realm
 
-test('every level balances', () => {
+test('every level balances, is solvable and not already solved', () => {
   LEVELS.forEach((L, i) => {
     const a = L.l.reduce((x, y) => x + y, 0);
     const b = L.r.reduce((x, y) => x + y, 0);
     assert.strictEqual(a, b, `level ${i + 1}`);
+    assert.notStrictEqual(a, L.t || 0, `level ${i + 1} already solved`);
+    assert.ok(B.minMoves(LEVELS, i) < Infinity, `level ${i + 1} impossible`);
   });
+});
+
+test('target level: pick the right tiles', () => {
+  const lv = [{ l: [9, -4, 3], r: [6, 2], t: 3 }]; // 8 → 3: move tiles worth 5 (9 and −4)
+  assert.strictEqual(B.minMoves(lv, 0), 2);
+  let s = B.newLevel(lv, 0);
+  s = B.move(s, s.left[0].id);
+  assert.ok(!B.isWon(s));
+  s = B.move(s, s.left[0].id);
+  assert.strictEqual(B.sum(s.left), 3);
+  assert.strictEqual(B.sum(s.right), 3);
+  assert.ok(B.isWon(s));
+  assert.strictEqual(B.equationText(s), '3 = 6 + 2 − 9 + 4');
 });
 
 test('moving a tile flips its sign and keeps both sides equal', () => {

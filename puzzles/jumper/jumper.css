@@ -1,0 +1,33 @@
+/* Number jumper — puzzle-specific styles */
+.pond {
+  position: relative;
+  display: flex; align-items: stretch; gap: clamp(4px, 1.2vw, 10px);
+  background: #CFE8FF; border: 3px solid var(--ink); border-radius: 20px;
+  padding: clamp(8px, 1.6vw, 14px) clamp(6px, 1.2vw, 10px);
+}
+.bank {
+  flex: 0 0 clamp(22px, 6vw, 64px);
+  background: #9BD47E; border: 3px solid var(--ink); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.river {
+  flex: 1; min-width: 0;
+  display: grid; grid-template-columns: repeat(var(--cols, 6), 1fr); align-items: center; gap: clamp(4px, 1.2vw, 10px);
+}
+.stone {
+  aspect-ratio: 1; min-width: 0; padding: 0;
+  border-radius: 50%; border: 3px solid var(--line); background: #F1F4F9; color: var(--ink-soft);
+  font-family: var(--display); font-weight: 800; font-size: clamp(15px, 3vw, 26px);
+  box-shadow: 0 3px 0 var(--line);
+}
+.stone.reach { border-color: var(--ink); background: var(--white); color: var(--ink); box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+.stone.reach:hover { transform: translateY(-2px); }
+.stone.here { border-color: var(--teal); background: var(--teal-tint); }
+.stone.sunk { background: transparent; border-style: dashed; color: var(--orange-text); box-shadow: none; }
+.stone.splash { animation: splash .5s ease-out; }
+@keyframes splash { from { box-shadow: 0 0 0 0 #2F5BEA88; } to { box-shadow: 0 0 0 22px #2F5BEA00; } }
+
+.frog { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 2; }
+.frog svg { display: block; width: clamp(34px, 7vw, 52px); height: auto; }
+
+.status { margin: 0; min-height: 1.5em; text-align: center; font-weight: 700; font-size: 17px; }

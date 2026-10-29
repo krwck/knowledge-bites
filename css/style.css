@@ -167,3 +167,63 @@ a.card:hover { color: var(--ink); transform: translate(-2px, -2px); box-shadow: 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Puzzle pages (shared) ---------- */
+.levels { display: flex; align-items: center; gap: 8px; }
+.levels-label { font-weight: 800; font-size: 15px; margin-right: 4px; }
+.levels-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.level-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--ink); background: var(--white); color: var(--ink);
+  font-family: var(--display); font-weight: 800; font-size: 17px; cursor: pointer;
+}
+.level-btn.done { background: var(--teal); color: var(--white); }
+.level-btn[aria-current="step"] { background: var(--ink); color: var(--white); }
+
+.layout { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+.game { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+.intro { display: flex; flex-direction: column; gap: 6px; }
+.intro h1 { font-size: clamp(36px, 5vw, 52px); line-height: 1; }
+.intro p { margin: 0; font-size: 19px; line-height: 1.45; color: var(--ink-soft); }
+.intro strong { color: var(--ink); }
+
+.goal {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--yellow); border: 3px solid var(--ink); border-radius: 20px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 14px 20px;
+  font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3.2vw, 30px); line-height: 1.15;
+}
+.goal svg { flex: none; }
+.goal-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 52px; height: 52px; padding: 0 10px; margin-left: 4px; vertical-align: middle;
+  border-radius: 999px; background: var(--ink); color: var(--white); font-size: 32px;
+}
+
+.board { border-radius: 26px; box-shadow: 6px 6px 0 var(--ink); padding: 28px 24px; display: flex; flex-direction: column; gap: 24px; }
+
+.win {
+  background: var(--teal-tint); padding: 20px 24px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+}
+.win[hidden] { display: none; }
+.win-text { display: flex; flex-direction: column; gap: 6px; }
+.stars { display: flex; gap: 6px; }
+.win-title { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1.1; }
+.win-title span { color: var(--teal-text); }
+.win-note { font-size: 16px; color: var(--ink-soft); }
+
+.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.moves { font-weight: 700; font-size: 17px; }
+.muted { color: var(--ink-soft); font-weight: 600; }
+
+.rule { flex: 1 1 260px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.rule h2 { font-size: 24px; }
+.rule p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
+.why {
+  background: #FFF1C7; border: 2px solid var(--ink); border-radius: 16px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;
+  font-size: 15px; line-height: 1.5;
+}
+.why span { color: var(--ink-soft); }
